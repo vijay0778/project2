@@ -1,0 +1,28 @@
+/* Toast Notifications */
+.toast {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: white;
+    font-size: 0.9rem;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    min-width: 250px;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast.success { background-color: #10b981; } /* green-500 */
+.toast.error { background-color: #ef4444; }   /* red-500 */
+.toast.info { background-color: #3b82f6; }   /* blue-500 */
+
+.toast .material-icons-outlined {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
