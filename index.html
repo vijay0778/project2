@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Kanban Board</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-800 min-h-screen font-['Inter'] transition-colors duration-300">
+
+    <div class="flex flex-col h-screen">
+        <!-- Header -->
+        <header class="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md shadow-sm border-b border-slate-200/50 dark:border-slate-700/50 sticky top-0 z-40">
+            <div class="container mx-auto px-4 py-4">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <h1 class="text-2xl font-bold text-slate-800 dark:text-white flex items-center">
+                        <span class="material-icons-outlined mr-2 text-3xl text-indigo-600">dashboard</span>
+                        Kanban Board
+                    </h1>
+                    <div class="flex items-center w-full sm:w-auto gap-3">
+                        <div class="relative flex-grow sm:flex-grow-0">
+                            <input type="text" id="search-input" placeholder="Search tasks..." class="w-full sm:w-64 pl-10 pr-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <span class="material-icons-outlined absolute left-3 top-2.5 text-slate-400">search</span>
+                        </div>
+                        <button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-all">
+                            <span class="material-icons-outlined">dark_mode</span>
+                        </button>
+                        <button id="add-task-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-all flex items-center shadow-lg hover:shadow-xl">
+                            <span class="material-icons-outlined mr-2">add</span>
+                            Add Task
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 container mx-auto px-4 py-8 overflow-x-auto">
+            <div id="search-results" class="text-center text-slate-600 dark:text-slate-400 mb-4 hidden"></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 min-w-[900px]">
+                <!-- To Do Column -->
+                <div class="bg-slate-200/50 dark:bg-slate-700/50 backdrop-blur-sm rounded-xl p-4 border border-slate-300/50 dark:border-slate-600/50">
+                    <h2 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex items-center justify-between">
+                        <span class="flex items-center"><span class="material-icons-outlined mr-2 text-lg">list</span> To Do</span>
+                        <span class="todo-count text-sm font-normal bg-slate-300/70 dark:bg-slate-600/70 text-slate-600 dark:text-slate-400 px-2 py-1 rounded-full" data-status="todo">0</span>
+                    </h2>
+                    <div id="todo-column" class="task-column space-y-3 min-h-[400px]" data-status="todo">
+                        <div class="empty-state flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 h-full">
+                            <span class="material-icons-outlined text-5xl mb-2">inbox</span>
+                            <p>No tasks yet. Add one!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- In Progress Column -->
+                <div class="bg-blue-200/50 dark:bg-blue-900/50 backdrop-blur-sm rounded-xl p-4 border border-blue-300/50 dark:border-blue-800/50">
+                    <h2 class="font-semibold text-blue-700 dark:text-blue-300 mb-4 flex items-center justify-between">
+                        <span class="flex items-center"><span class="material-icons-outlined mr-2 text-lg">autorenew</span> In Progress</span>
+                        <span class="todo-count text-sm font-normal bg-blue-300/70 dark:bg-blue-800/70 text-blue-600 dark:text-blue-400 px-2 py-1 rounded-full" data-status="in-progress">0</span>
+                    </h2>
+                    <div id="in-progress-column" class="task-column space-y-3 min-h-[400px]" data-status="in-progress">
+                         <div class="empty-state flex flex-col items-center justify-center text-blue-500 dark:text-blue-400 h-full">
+                            <span class="material-icons-outlined text-5xl mb-2">hourglass_empty</span>
+                            <p>Drag tasks here to start.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Done Column -->
+                <div class="bg-green-200/50 dark:bg-green-900/50 backdrop-blur-sm rounded-xl p-4 border border-green-300/50 dark:border-green-800/50">
+                    <h2 class="font-semibold text-green-700 dark:text-green-300 mb-4 flex items-center justify-between">
+                        <span class="flex items-center"><span class="material-icons-outlined mr-2 text-lg">check_circle</span> Done</span>
+                        <span class="todo-count text-sm font-normal bg-green-300/70 dark:bg-green-800/70 text-green-600 dark:text-green-400 px-2 py-1 rounded-full" data-status="done">0</span>
+                    </h2>
+                    <div id="done-column" class="task-column space-y-3 min-h-[400px]" data-status="done">
+                         <div class="empty-state flex flex-col items-center justify-center text-green-500 dark:text-green-400 h-full">
+                            <span class="material-icons-outlined text-5xl mb-2">task_alt</span>
+                            <p>Completed tasks will appear here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Task Modal -->
+    <div id="task-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 w-full max-w-md shadow-2xl transform transition-all">
+            <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-white">Create New Task</h3>
+            <form id="task-form">
+                <div class="mb-4 relative">
+                    <label class="block text-slate-700 dark:text-slate-300 text-sm font-medium mb-2">Task Title</label>
+                    <input type="text" id="task-title" required class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-slate-700 dark:text-white">
+                    <div id="suggestions-container" class="absolute top-full left-0 right-0 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg mt-1 shadow-lg z-10 hidden max-h-48 overflow-y-auto"></div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-slate-700 dark:text-slate-300 text-sm font-medium mb-2">Description</label>
+                    <textarea id="task-description" rows="3" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-slate-700 dark:text-white resize-none"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="mb-4">
+                        <label class="block text-slate-700 dark:text-slate-300 text-sm font-medium mb-2">Priority</label>
+                        <select id="task-priority" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-slate-700 dark:text-white">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-slate-700 dark:text-slate-300 text-sm font-medium mb-2">Due Date</label>
+                        <input type="date" id="task-date" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-slate-700 dark:text-white">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancel-btn" class="px-4 py-2 bg-slate-300 dark:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-400 dark:hover:bg-slate-500 transition-colors">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md">Add Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- NEW: Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
